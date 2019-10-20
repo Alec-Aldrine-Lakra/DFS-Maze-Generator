@@ -11,7 +11,7 @@ function setup(){
  createCanvas(width,height);
  cols = floor(width/w);
  rows = floor(height/w);
- ci=floor(random(0,cols));
+ ci=floor(random(0,cols)); //getting random position of the starting cell
  cj=floor(random(0,rows));
  for(let i=0; i< cols; i++)
  {
@@ -24,14 +24,13 @@ function setup(){
  	grid.push(ar);
  } 
  grid[ci][cj].visited=true; //ci , cj denotes current cell
- //noLoop();
 }
 
 function draw(){
 	background(51);
 	noStroke();
 	fill(255,0,78);
-	rect(ci*w,cj*w,w,w);
+	rect(ci*w,cj*w,w,w); //displaying the current cell position
 	stroke(255);
 	for(let i=0; i<grid.length; i++)
 	{
@@ -42,11 +41,11 @@ function draw(){
 	if(next){
 		stack.push([ci,cj]);
 		grid[next[0]][next[1]].visited=true;
-		removeWalls(ci,cj,next[0],next[1]);
-		[ci,cj]=next;
+		removeWalls(ci,cj,next[0],next[1]); //removing walls between current and neighbor
+		[ci,cj]=next; //next neighbor becomes the current
 	}
 	else if(stack.length>0)
-		[ci,cj] = stack.pop();
+		[ci,cj] = stack.pop(); //backtracking 
 }
 
 function show(i,j)
@@ -54,7 +53,7 @@ function show(i,j)
 	let x = i*w;
 	let y = j*w;
 	if(grid[i][j].walls[0]){
-			line(x  , y,   x+w, y); //top	
+		line(x  , y,   x+w, y); //top	
 	}
 	if(grid[i][j].walls[1]){
 		line(x+w, y,   x+w,  y+w); //right	
@@ -77,7 +76,7 @@ function removeWalls(i1,j1,i2,j2)
 	}
 	else if(dx===-1)
 	{
-		grid[i1][j1].walls[1] = false; //removing left wall of current
+		grid[i1][j1].walls[1] = false; //removing right wall of current
 		grid[i2][j2].walls[3]=false;  //removing left wall of neighbor
 	}
 
@@ -98,15 +97,15 @@ function checkNeighbors(i,j)
 	let neighbor=[];
 	if(grid[i] && grid[i][j-1] && !grid[i][j-1].visited) //top
 		neighbor.push([i,j-1]);
+	if(grid[i-1] && grid[i-1][j] && !grid[i-1][j].visited)//left
+		neighbor.push([i-1,j]);
 	if(grid[i] && grid[i][j+1] && !grid[i][j+1].visited) //bottom
 		neighbor.push([i,j+1]);
-    if(grid[i-1] && grid[i-1][j] && !grid[i-1][j].visited)//left
-		neighbor.push([i-1,j]);
 	if(grid[i+1] && grid[i+1][j] && !grid[i+1][j].visited) //right
 		neighbor.push([i+1,j]);	
 
 	if(neighbor.length>0)
 		return neighbor[floor(random(0,neighbor.length))];
 	else
-	  return undefined; //if all neighbors are visited
+	  	return undefined; //if all neighbors are visited
 }
