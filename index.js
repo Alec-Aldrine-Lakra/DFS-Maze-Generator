@@ -1,6 +1,6 @@
 'use strict';
-const width = 450, height= 450;
-const w = 15;
+const width = 400, height= 400;
+const w = 20;
 let cols;
 let rows;
 let grid=[];
@@ -24,14 +24,19 @@ function setup(){
  	grid.push(ar);
  } 
  grid[ci][cj].visited=true; //ci , cj denotes current cell
+ //noLoop();
 }
 
 function draw(){
 	background(51);
+	noStroke();
+	fill(255,0,78);
+	rect(ci*w,cj*w,w,w);
+	stroke(255);
 	for(let i=0; i<grid.length; i++)
 	{
 		for(let j=0; j<grid[i].length; j++)
-			show(i,j);
+			show(j,i);
 	}
 	let next = checkNeighbors(ci,cj); //returns co-ordinates of neighbor
 	if(next){
@@ -46,17 +51,10 @@ function draw(){
 
 function show(i,j)
 {
-	let y = i*w;
-	let x = j*w;
-	if(grid[i][j].visited)
-	{
-		noStroke();
-		fill(255,0,78,80);
-		rect(x,y,w,w);
-	}
-	stroke(255);
+	let x = i*w;
+	let y = j*w;
 	if(grid[i][j].walls[0]){
-		line(x  , y,   x+w, y); //top	
+			line(x  , y,   x+w, y); //top	
 	}
 	if(grid[i][j].walls[1]){
 		line(x+w, y,   x+w,  y+w); //right	
@@ -74,13 +72,13 @@ function removeWalls(i1,j1,i2,j2)
 	let dx = i1 - i2, dy = j1 - j2;
 	if(dx===1) //neighbor is left of current cell
 	{
-		grid[i1][j1].walls[1] = false; //removing left wall of current
-		grid[i2][j2].walls[3]= false; //removing right wall of neighbor
+		grid[i1][j1].walls[3] = false; //removing left wall of current
+		grid[i2][j2].walls[1]= false; //removing right wall of neighbor
 	}
 	else if(dx===-1)
 	{
-		grid[i1][j1].walls[3] = false; //removing left wall of current
-		grid[i2][j2].walls[1]=false;  //removing left wall of neighbor
+		grid[i1][j1].walls[1] = false; //removing left wall of current
+		grid[i2][j2].walls[3]=false;  //removing left wall of neighbor
 	}
 
 	if(dy===1)
